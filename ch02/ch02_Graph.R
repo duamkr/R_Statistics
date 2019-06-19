@@ -59,6 +59,7 @@ ggplot(df_Nile2, aes(x = year, y = flood)) +
 # 막대그래프
 load('data.rda')
 tableV5 <- table(data$V5) ;tableV5
+View(tableV5)
 barplot(tableV5, main = '출생아(남자)별 빈도', xlab = '출생아수', ylab = '빈도')
 
 tableV1.V4 <- table(data$V1, data$V4)
