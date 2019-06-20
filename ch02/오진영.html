@@ -399,14 +399,21 @@ $(document).ready(function () {
 <li>아니다!</li>
 </ul>
 <ol start="4" style="list-style-type: decimal">
-<li>주사위를 한 번 던졌을 때, 숫자 2가 나오는지를 체크한다. -맞다!</li>
+<li>주사위를 한 번 던졌을 때, 숫자 2가 나오는지를 체크한다.</li>
 </ol>
+<ul>
+<li>맞다!</li>
+</ul>
 </div>
 <div id="section-1" class="section level2">
 <h2>2. 한 축구 선수가 페널티킥을 차면 5번 중 4번을 성공한다고 한다.</h2>
 <ol style="list-style-type: decimal">
 <li>이 선수가 10번의 페널티킥을 차서 7번 성공할 확률을 구하시오</li>
 </ol>
+<pre class="r"><code>n &lt;- 10
+p &lt;- 4/5
+x &lt;- 0:n
+pbinom(10, size= n, prob= p) - pbinom(6, size= n, prob= p)</code></pre>
 <pre><code>## [1] 0.8791261</code></pre>
 </div>
 <div id="a--------a--5--." class="section level2">
@@ -417,7 +424,7 @@ $(document).ready(function () {
 <pre class="r"><code>n &lt;- 20
 p &lt;- 0.05
 x &lt;- 0:n
-1 - pbinom(2, size= n, prob= p) #+ pbinom(2, size= n, prob= p)</code></pre>
+1 - pbinom(2, size= n, prob= p) </code></pre>
 <pre><code>## [1] 0.07548367</code></pre>
 </div>
 <div id="section-2" class="section level2">
@@ -434,6 +441,8 @@ x &lt;- 0:n
 </div>
 <div id="section-3" class="section level2">
 <h2>5. 주사위 두 개를 던졌을 때, 눈금의 합이 6이 될 확률을 구하시오.</h2>
+<pre class="r"><code># 주사위를 던져 합이 6이 나올 확율 (1,5)(2,4)(3,3)(4,2)(5,1) 
+# 5/36</code></pre>
 </div>
 <div id="a-----800--40---." class="section level2">
 <h2>5. A라는 전구회사에서 생산하는 전구의 수명은 800일이고 표준편차는 40일인 정규분포를 따른다고 한다.</h2>
@@ -478,6 +487,15 @@ pnorm(90, mean= mu, sd=sigma) - pnorm(80, mean= mu, sd=sigma)</code></pre>
 <ol style="list-style-type: decimal">
 <li>H(0) + H(2)의 값을 구하시오.</li>
 </ol>
+<pre class="r"><code>mu &lt;- 1.5
+sigma &lt;- 2
+
+# H(0) = (0 &lt;= x &lt;= 1), H(2) = (2 &lt;= x &lt;=3)
+p1 &lt;-pnorm(1, mean= mu, sd=sigma) - pnorm(0, mean= mu, sd=sigma)
+p2 &lt;-pnorm(2, mean= mu, sd=sigma) - pnorm(3, mean= mu, sd=sigma)
+# 정규 분포이기 때문에 1.5를 기준으로 양옆의 H(0), H(2)의 함수 면적값이 2개이므로 *2
+p1 * 2</code></pre>
+<pre><code>## [1] 0.349</code></pre>
 </div>
 
 

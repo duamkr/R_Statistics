@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 1) 이 선수가 10번의 페널티킥을 차서 7번 성공할 확률을 구하시오
 
 
-```{r pressure, echo=FALSE}
+```{r pressure}
 n <- 10
 p <- 4/5
 x <- 0:n
@@ -108,11 +108,11 @@ mu <- 1.5
 sigma <- 2
 
 # H(0) = (0 <= x <= 1), H(2) = (2 <= x <=3)
-pnorm(0.25, mean= mu, sd=sigma)
-pnorm(0, mean= mu, sd=sigma)
-d1 <- dnorm(0.75, mean= mu, sd=sigma)
-d2 <- dnorm(-0.25, mean= mu, sd=sigma)
-(d1 - d2) * 2
+p1 <-pnorm(1, mean= mu, sd=sigma) - pnorm(0, mean= mu, sd=sigma)
+p2 <-pnorm(2, mean= mu, sd=sigma) - pnorm(3, mean= mu, sd=sigma)
+# 정규 분포이기 때문에 1.5를 기준으로 양옆의 H(0), H(2)의 함수 면적값이 2개이므로 *2
+p1 * 2
+
 ```
 
 
