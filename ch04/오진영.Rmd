@@ -1,0 +1,42 @@
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+set.seed(9)
+x <- seq(0,500,by=0.001)
+mean.4   <- rep(NA, 1000)     # 결측치 생성 
+mean.16  <- rep(NA, 1000)
+mean.32  <- rep(NA, 1000)
+mean.256 <- rep(NA, 1000)
+
+for(i in 1:1000) {         
+  mean.4[i]   <- mean(rchisq(4,5))
+  mean.16[i]  <- mean(rchisq(16,5))
+  mean.32[i]  <- mean(rchisq(32,5))
+  mean.256[i] <- mean(rchisq(256,5))
+}
+
+c(mean(mean.4), sd(mean.4))
+c(mean(mean.16), sd(mean.16))
+c(mean(mean.32), sd(mean.32))
+c(mean(mean.256), sd(mean.256))
+
+hist(mean.4,prob=T,main="카이제곱분포 df=5, n= 4",
+     col="cyan")
+x1 <- seq(min(mean.4),max(mean.4),length=1000)
+y1 <- dnorm(x1, mean = 1, sd=sqrt(10)/sqrt(4))
+lines(x1, y1, lty=2, lwd=2, col="blue")
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
