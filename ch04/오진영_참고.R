@@ -20,6 +20,8 @@ c(mean(chi.5.mean),sd(chi.5.mean))
 c(mean(chi.20.mean),sd(chi.20.mean))
 c(mean(chi.40.mean),sd(chi.40.mean))
 c(mean(chi.160.mean),sd(chi.160.mean))
+var(x)
+sqrt(833)
 par(mfrow=c(2,2))
 hist(chi.5.mean,prob=T,main="Chi-square with n=5",
      col="yellow",border="red")
