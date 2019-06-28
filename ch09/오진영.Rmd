@@ -1,0 +1,95 @@
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(MASS)
+```
+
+
+
+## 회귀분석
+
+ 1.부모의 키가 클수록 자식의 키도 상대적으로 크다고 하는데, 아버지의 키와 아들의 키를 조사하였더니 아래와 같이 나왔다고 한다. 이 자료를 바탕으로 해서 회귀식을 구하고 아버지의 키가 165cm일 때 아들의 키는 얼마인지 예측하시오. 	아버지의 키(x):	150  160  170  180  190	아들의 키(y):	176  179  182  181  185
+
+
+```{r}
+fa <- c(150,160,170,180,190)
+son <- c(176,179,182,181,185)
+ki <- data.frame(fa,son)
+
+k1 <- lm(son ~ fa, data = ki)
+anova(k1)
+summary(k1)
+# 아버지의 키가 165cm 일때 아들의 키는 얼마 인가?
+cat(146.6 + (0.2*(165)),"cm")
+```
+
+
+ 2.소득이 높을수록 신용카드 사용량이 많아진다고 하는데, 월 소득 대비 신용카드 사용량을 조사하였더니 아래와 같이 나왔다고 한다. 이 자료를 바탕으로 해서 회귀식을 구하고, 월 소득이 250만원일 때 신용카드 사용량을 예측하시오. (단위: 만원) 	
+ 월 소득(x):	100  200  300  400  500 	
+ 카드 사용량(y):	 30    70    85  140  197
+
+```{r}
+mc <- c(100,200,300,400,500)
+cu <- c(30,70,85,140,197)
+ca <- data.frame(cu,mc)
+
+
+c1 <- lm(cu ~ mc, data = ca)
+anova(c1)
+summary(c1)
+# 월 소득이 250만원일때 신용카드 샤용량을 예측하시오
+cat(-16.8 + 250*(0.404),"만원")
+
+```
+
+ 3. mtcars 데이터셋에서 배기량(disp)에 따른 마력(hp)의 회귀식을 구하시오.
+
+```{r}
+data <- mtcars
+hp1 <- lm(data$hp ~ data$disp, data=data)
+anova(hp1)
+summary(hp1)
+
+# y = 45.73+0.43(x)
+
+
+```
+
+
+ 4. MASS 패키지를 설치하고, 이 패키지 안에 있는 Boston 데이터셋을 이용하여 Boston 인근의 집값을 결정하는 다중회귀 모델을 만드시오.
+  
+```{r}
+data1 <- Boston
+
+medv1 <- lm(medv ~ . , data=data1)     # . <- 나머지 변수 전부다 적용
+summary(medv1)
+
+AIC(medv1)
+
+# 결과 값중 indus, age는 관계성이 부족하므로 제외 후 다중 회귀분석
+medv2 <- lm(medv ~ crim + zn + chas + nox + rm + dis +rad + tax + ptratio + black + lstat, data = data1)
+summary(medv2)
+AIC(medv2)
+
+# medv2 결과 값중 crim, chas 는 관계성이 다른 항목보다 (**개) 부족하므로 제외 후 다중 회귀분석
+medv3 <- lm(medv ~ zn + nox + rm + dis +rad + tax + ptratio + black + lstat, data = data1)
+summary(medv3)
+AIC(medv3)
+
+
+AIC(medv1, medv2, medv3)
+# AIC분석 후 확인 결과 Boston의 집값을 다중 회귀모델은 mdev2(indus, age 제외)이 가장 적절한 것으로 보인다.
+
+
+```
+
+
+```{r}
+# stepwise (backward)
+
+step(medv1, direction = 'backward')
+# stepwise(backward) 실행 시  medv ~ crim + zn + chas + nox + rm + dis + rad + tax + ptratio + black + lstat 의 회귀모델 적합
+```
+  
+  
