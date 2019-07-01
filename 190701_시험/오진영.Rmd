@@ -1,0 +1,184 @@
+---
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+```
+
+## 1. 다음의 값을 R 내장함수를 이용하여 구하시오
+1) 시행횟수가 6이고 성공확률이 1/3인 이항분포에서 성공횟수가 3이 될 확률
+```{r}
+dbinom(3,size=10,prob=1/3)
+cat(dbinom(3,size=10,prob=1/3)*100,"%")
+```
+
+2) 평균이 170이고 표준편차가 6인 정규분포에서 상위 20%가 되는 사람들의 키 범위
+```{r}
+qnorm(0.95,mean=170,sd=6)
+qnorm(0.8,mean=170,sd=6)
+cat(qnorm(0.8,mean=170,sd=6),"cm ~",qnorm(0.95,mean=170,sd=6),"cm")
+```
+
+3) 자유도가 3인 카이제곱 분포에서 누적확률이 95% 일때의 값
+```{r}
+```
+
+4) 자유도가 2인 t-분포에서 누적확률이 0.975일 때의 값
+```{r}
+qt(0.975,3)
+```
+
+5) 표준정규분포에서 확률변수의 값이 1일 떄 의 누적 확률
+```{r}
+pnorm(1)
+```
+
+
+## 2. 다음의 문항이 베르누이 시행인지 판단하시오
+
+1) 영화관에서 줄을 기다리는 시간을 측정한다. 
+ - 아니다.
+2) 전화가 왔을때, 전화를 한 사람이 여자인지를 측정한다.
+ - 맞다
+3) 주사위를 한 번 던졌을 때, 나오는 숫자를 체크한다.
+ - 아니다
+4) 동전의 앞면이 위로 향하고 있는지 체크한다.
+ - 맞다
+5) 사람의 눈이 녹색인지 체크한다.
+ - 아니다
+
+
+
+## 3. R 내장 데이터인 iris를 이용하여 다음을 구하시오
+1) "setosa"종 Sepal.Length의 모평균에 대한 95% 신뢰구간
+```{r}
+setosa1 <- iris %>%
+  filter(Species=='setosa')
+ t.test(setosa1$Sepal.Length)
+# setosa 종의 Sepal,Length 의 95% 신뢰구간 " 4.905824 ~ 5.106176 " 
+```
+
+
+## 4. 한 농구선수가 자유투를 던지면 10번중에서 7번을 성공한다고 할 때, 다음을 R을 이용하여 풀이하시오.
+1) 이 선수가 자유투를 10번 던져서 9번 이상 성공할 확률을 구하시오.
+```{r}
+dbinom(9,size=10,prob=7/10)
+cat(dbinom(9,size=10,prob=7/10)*100,"%")
+```
+
+2) 이 선수가 자유투를 10번 던질 때 5번 이상 8번 이하로 성공할 확률을 구하시오
+
+```{r}
+pbinom(8,size=10,prob=7/10) - pbinom(5,size=10,prob=7/10)
+cat((pbinom(8,size=10,prob=7/10) - pbinom(5,size=10,prob=7/10))*100,"%")
+```
+
+
+## 5. 다음을 R을 이용하여 검정하시오.
+1) 2006년 조사에 의하면 한국인의 1인 1일 평균 알코올 섭취량이 8.1g이다.
+   2008년 무작위로 뽑은 알코올 섭취량은 다음과 같다.
+  [16.9, 13.21, 15.67, 9.87, 13.15, 9.98, 3.56, 14.50, 8.12, 6.97] 
+  평균 알코올 섭취량이 달라졌다고 할 수 있는가?
+  
+```{r}
+p5 <- c(16.9, 13.21, 15.67, 9.87, 13.15, 9.98, 3.56, 14.50, 8.12, 6.97)
+t.test(p5,mu=8.1)
+# p-value < 0.05 이므로 영가설 기각, 대립가설 채택. 평균 알코올 섭취량은 달라졌다고 볼 수 있다. 
+```
+
+
+## 6. 정규분포에서 from <= X <= to 의 확률을 구하는 함수
+ 1) rangenorm(from, to, mean, sd)을 작성하고 rangenorm(-1.96,1.96,0,1)의 값을 구하시오
+```{r}
+mu <- 0
+sd <- 1
+# -1.96 <= X <= 1.96
+pnorm(1.96, 0, 1) - pnorm(-1.96, 0,1)
+```
+
+
+mu <- 1.5
+sigma <- 2
+
+# H(0) = (0 <= x <= 1), H(2) = (2 <= x <=3)
+p1 <-pnorm(1, mean= mu, sd=sigma) - pnorm(0, mean= mu, sd=sigma)
+p2 <-pnorm(2, mean= mu, sd=sigma) - pnorm(3, mean= mu, sd=sigma)
+# 정규 분포이기 때문에 1.5를 기준으로 양옆의 H(0), H(2)의 함수 면적값이 2개이므로 *2
+p1 * 2
+
+```
+ 
+
+
+## 7. mpg데이터셋에서 다음을 검정해 보시오
+1) subcompact 자동차와 midsize 자동차의 도시연비
+
+```{r}
+# 정규성 테스트
+
+mpg1 <- mpg
+mpg1$hwy[mpg1$class=="subcompact"]
+shapiro.test(mpg1$hwy[mpg1$class=="subcompact"])
+par(mfrow=c(1,2))
+qqnorm(mpg1$hwy[mpg1$class=="subcompact"]) ; qqline(mpg1$hwy[mpg1$class=="subcompact"])
+
+mpg1$hwy[mpg1$class=="midsize"]
+shapiro.test(mpg1$hwy[mpg1$class=="midsize"])
+qqnorm(mpg1$hwy[mpg1$class=="midsize"]) ; qqline(mpg1$hwy[mpg1$class=="midsize"])
+
+# p-value값 < 0.05 이므로 자동차 class 중 'subcompact', 'midsize'의 변수는 정규성을 갖지 않음
+
+# 등분산성 테스트
+mpg2 <- mpg1 %>%
+  filter(class %in% c("subcompact","midsize"))
+var.test(mpg2$hwy ~ mpg2$class)
+# p-value < 0.05, 두 집단의 분산은 다르다.
+
+# 2 -sample T 테스트
+t.test(mpg2$hwy~mpg2$class, equal=F)
+# p-value > 0.05 이므로 영가설을 기각하지 못함. 자동차 class의 subcompact와 midsize에 따라서 고속도로연비는 달라지지 않는다.
+```
+
+2) 일반 휘발류(r)와 고급휘발류(p)의 고속도로 연비
+
+```{r}
+mpg1$hwy[mpg1$fl=="r"]
+shapiro.test(mpg1$hwy[mpg1$fl=="r"])
+par(mfrow=c(1,2))
+qqnorm(mpg1$hwy[mpg1$fl=="r"]) ; qqline(mpg1$hwy[mpg1$fl=="r"])
+
+mpg1$hwy[mpg1$fl=="p"]
+shapiro.test(mpg1$hwy[mpg1$fl=="p"])
+qqnorm(mpg1$hwy[mpg1$fl=="p"]) ; qqline(mpg1$hwy[mpg1$fl=="p"])
+# p-value값 < 0.05 이므로 일반휘발류와 고급휘발류의 변수는 정규성을 갖지 않음
+
+# 등분산성 테스트
+mpg3 <- mpg1 %>%
+  filter(fl %in% c("r","p"))
+var.test(mpg3$hwy ~ mpg3$fl)
+# p-value < 0.05, 두 집단의 분산은 다르다.
+
+# 2 -sample T 테스트
+t.test(mpg3$hwy~mpg3$fl, equal=F)
+# p-value > 0.05 이므로 영가설을 기각하지 못함. 일반휘발류와 고급휘발류의 연료 종류 따라서 고속도로연비는 달라지지 않는다.
+```
+
+## 8. 다음을 R을 이용하여 적합도를 검정하시오
+
+```{r}
+
+```
+
+
+## 9. R내장 데이터인 women을 이용하여 다음을 구하시오
+1) 키(Height)와 몸무게(Weight)의 곡선회귀분석을 통한 회귀식(단, 2차식으로 구할 것.)
+
+```{r}
+wf <- lm(weight~height  + I(height^2) , data=women) 
+summary(wf)
+
+# 곡선 회귀분석 회귀식 "261.87818 + 0.08306*(X)" 
+```
+
